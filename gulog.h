@@ -7,6 +7,7 @@
 #include <map>
 #include <time.h>
 #include <boost/thread/mutex.hpp>
+#include <boost/thread/tss.hpp>
 
 namespace growup{namespace log
 {
@@ -114,7 +115,7 @@ namespace growup{namespace log
 			_logtype = loglevel;
 		}
 	private:
-		GrowupStream* getOstsByThread(unsigned int threadID);
+		GrowupStream* getTlsOst();
 		void OpenFile(unsigned int file_number,unsigned int crash_number);
 		void CloseFile();
 		void RemoveFile(unsigned int file_number,unsigned int crash_number);
@@ -122,9 +123,8 @@ namespace growup{namespace log
 	private:
 		static const int _s_timval = 1000;
 	private:
-		std::map<unsigned int,GrowupStream*> _osts_map;
+		boost::thread_specific_ptr<GrowupStream> _tls_stream;
 		boost::mutex _file_mutex;
-		boost::mutex _osts_mutex;
 		std::ofstream _ofs;
 		std::string _file_name;
 		unsigned int _file_size_limit;

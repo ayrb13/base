@@ -142,14 +142,12 @@ namespace growup{namespace log
 			return crash_time;
 	}
 
-	GrowupStream* log_mgr::getOstsByThread( unsigned int threadID )
+	GrowupStream* log_mgr::getTlsOst()
 	{
-		boost::mutex::scoped_lock sl(_osts_mutex);
-		std::map<unsigned int,GrowupStream*>::iterator it = _osts_map.find(threadID);
-		if(it == _osts_map.end())
-			it = _osts_map.insert(std::make_pair(threadID,new GrowupStream())).first;
-		it->second->clear();
-		return it->second;
+		if(!_tls_stream.get())
+			_tls_stream.reset(new GrowupStream());
+
+		return _tls_stream.get();
 	}
 
 	void log_mgr::append( const std::vector<char>& buff )
@@ -177,7 +175,7 @@ namespace growup{namespace log
 		{
 			unsigned int threadId = growup::log::getCurrentThreadId();
 
-			_pOs = log_mgr::getInstance().getOstsByThread(threadId);
+			_pOs = log_mgr::getInstance().getTlsOst();
 
 			char time_buffer[32];
 			::tm tmp_tm;
