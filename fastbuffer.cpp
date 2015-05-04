@@ -2,7 +2,7 @@
 #include <string.h>
 #include "fastbuffer.h"
 
-fastbuffer::fastbuffer() :_buf((char*)malloc(1024))
+FastBuffer::FastBuffer() :_buf((char*)malloc(1024))
 	,_buf_size(1024)
 	,_beg(0)
 	,_end(0)
@@ -10,7 +10,7 @@ fastbuffer::fastbuffer() :_buf((char*)malloc(1024))
 
 }
 
-fastbuffer::fastbuffer( const fastbuffer& r ) :_buf((char*)malloc(r._buf_size))
+FastBuffer::FastBuffer( const FastBuffer& r ) :_buf((char*)malloc(r._buf_size))
 	,_buf_size(r._buf_size)
 	,_beg(r._beg)
 	,_end(r._end)
@@ -18,7 +18,7 @@ fastbuffer::fastbuffer( const fastbuffer& r ) :_buf((char*)malloc(r._buf_size))
 	memcpy(_buf + _beg, r._buf + _beg, _end - _beg);
 }
 
-fastbuffer& fastbuffer::operator=( const fastbuffer& r )
+FastBuffer& FastBuffer::operator=( const FastBuffer& r )
 {
 	if(&r != this)
 	{
@@ -31,7 +31,7 @@ fastbuffer& fastbuffer::operator=( const fastbuffer& r )
 	return *this;
 }
 
-void fastbuffer::extend(size_type s)
+void FastBuffer::extend(size_type s)
 {
 	if(_buf_size - _end >= s)
 		return;
@@ -69,7 +69,7 @@ void fastbuffer::extend(size_type s)
 	assert(_buf);
 }
 
-fastbuffer::size_type fastbuffer::read( char* b, size_type l )
+FastBuffer::size_type FastBuffer::read( char* b, size_type l )
 {
 	if(l > _end - _beg)
 		l = _end - _beg;
@@ -78,7 +78,7 @@ fastbuffer::size_type fastbuffer::read( char* b, size_type l )
 	return l;
 }
 
-fastbuffer::size_type fastbuffer::write( const char* b, size_type l )
+FastBuffer::size_type FastBuffer::write( const char* b, size_type l )
 {
 	extend(l);
 	memcpy(_buf + _end, b, l);
@@ -86,7 +86,7 @@ fastbuffer::size_type fastbuffer::write( const char* b, size_type l )
 	return l;
 }
 
-fastbuffer::~fastbuffer()
+FastBuffer::~FastBuffer()
 {
 	free(_buf);
 }

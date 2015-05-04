@@ -6,15 +6,15 @@
 #include <string>
 #include <iostream>
 
-class fastbuffer
+class FastBuffer
 {
 public:
 	typedef unsigned long size_type;
 public:
-	fastbuffer();
-	fastbuffer(const fastbuffer& r);
-	fastbuffer& operator=(const fastbuffer& r);
-	~fastbuffer();
+	FastBuffer();
+	FastBuffer(const FastBuffer& r);
+	FastBuffer& operator=(const FastBuffer& r);
+	~FastBuffer();
 public:
 	//inline
 	inline void	clear()
@@ -22,33 +22,33 @@ public:
 		_beg = 0;
 		_end = 0;
 	}
-	inline size_type size()
+	inline size_type size() const
 	{
 		return _end - _beg;
 	}
-	inline bool empty()
+	inline bool empty() const
 	{
 		return _beg == _end;
 	}
 	//api for network
-	const char* read_pos()
+	inline const char* read_pos() const
 	{
 		return _buf + _beg;
 	}
-	char* write_pos()
+	inline char* write_pos()
 	{
 		return _buf + _end;
 	}
-	void pop_read(size_type l)
+	inline void pop_read(size_type l)
 	{
 		assert(l <= size());
 		_beg += l;
 	}
-	size_type	size_for_write()
+	inline size_type size_for_write() const
 	{
 		return _buf_size - _end;
 	}
-	void push_write(size_type l)
+	inline void push_write(size_type l)
 	{
 		assert(l <= size_for_write());
 		_end += l;
