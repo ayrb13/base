@@ -144,10 +144,11 @@ namespace growup{namespace log
 
 	GrowupStream* log_mgr::getTlsOst()
 	{
-		if(!_tls_stream.get())
-			_tls_stream.reset(new GrowupStream());
+		GrowupStream* ret = _tls_stream.get();
+		if(!ret)
+			_tls_stream.reset((ret = new GrowupStream()));
 
-		return _tls_stream.get();
+		return ret;
 	}
 
 	void log_mgr::append( const std::vector<char>& buff )
